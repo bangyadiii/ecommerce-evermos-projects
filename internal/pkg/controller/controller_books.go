@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"ecommerce-evermos-projects/internal/helper"
+	booksdto "ecommerce-evermos-projects/internal/pkg/dto"
+	booksusecase "ecommerce-evermos-projects/internal/pkg/usecase"
 	"log"
-	"tugas_akhir_example/internal/helper"
-	booksdto "tugas_akhir_example/internal/pkg/dto"
-	booksusecase "tugas_akhir_example/internal/pkg/usecase"
 
 	"github.com/gofiber/fiber/v2"
 )

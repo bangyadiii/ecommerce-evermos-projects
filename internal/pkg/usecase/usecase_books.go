@@ -2,13 +2,13 @@ package usecase
 
 import (
 	"context"
+	"ecommerce-evermos-projects/internal/daos"
+	"ecommerce-evermos-projects/internal/helper"
+	booksdto "ecommerce-evermos-projects/internal/pkg/dto"
+	booksrepository "ecommerce-evermos-projects/internal/pkg/repository"
 	"errors"
 	"fmt"
 	"log"
-	"tugas_akhir_example/internal/daos"
-	"tugas_akhir_example/internal/helper"
-	booksdto "tugas_akhir_example/internal/pkg/dto"
-	booksrepository "tugas_akhir_example/internal/pkg/repository"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"

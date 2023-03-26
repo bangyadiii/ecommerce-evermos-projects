@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
+	"ecommerce-evermos-projects/internal/daos"
 	"fmt"
-	"tugas_akhir_example/internal/daos"
 
 	"gorm.io/gorm"
 )

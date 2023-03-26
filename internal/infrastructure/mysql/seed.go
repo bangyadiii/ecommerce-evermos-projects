@@ -1,6 +1,6 @@
 package mysql
 
-import "tugas_akhir_example/internal/daos"
+import "ecommerce-evermos-projects/internal/daos"
 
 var booksSeed = []daos.Book{
 	{

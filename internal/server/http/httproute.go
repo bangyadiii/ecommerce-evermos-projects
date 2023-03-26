@@ -1,9 +1,9 @@
 package http
 
 import (
-	route "tugas_akhir_example/internal/server/http/handler"
+	route "ecommerce-evermos-projects/internal/server/http/handler"
 
-	"tugas_akhir_example/internal/infrastructure/container"
+	"ecommerce-evermos-projects/internal/infrastructure/container"
 
 	"github.com/gofiber/fiber/v2"
 )

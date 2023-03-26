@@ -1,12 +1,12 @@
 package main
 
 import (
+	"ecommerce-evermos-projects/internal/helper"
+	"ecommerce-evermos-projects/internal/infrastructure/container"
+	"ecommerce-evermos-projects/internal/infrastructure/mysql"
 	"fmt"
-	"tugas_akhir_example/internal/helper"
-	"tugas_akhir_example/internal/infrastructure/container"
-	"tugas_akhir_example/internal/infrastructure/mysql"
 
-	rest "tugas_akhir_example/internal/server/http"
+	rest "ecommerce-evermos-projects/internal/server/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"

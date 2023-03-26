@@ -1,15 +1,15 @@
 package handler
 
 import (
-	"tugas_akhir_example/internal/infrastructure/container"
+	"ecommerce-evermos-projects/internal/infrastructure/container"
 
 	"github.com/gofiber/fiber/v2"
 
-	bookscontroller "tugas_akhir_example/internal/pkg/controller"
+	bookscontroller "ecommerce-evermos-projects/internal/pkg/controller"
 
-	booksrepository "tugas_akhir_example/internal/pkg/repository"
+	booksrepository "ecommerce-evermos-projects/internal/pkg/repository"
 
-	booksusecase "tugas_akhir_example/internal/pkg/usecase"
+	booksusecase "ecommerce-evermos-projects/internal/pkg/usecase"
 )
 
 func BooksRoute(r fiber.Router, containerConf *container.Container) {

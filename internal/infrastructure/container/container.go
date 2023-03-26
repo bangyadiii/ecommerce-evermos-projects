@@ -1,12 +1,12 @@
 package container
 
 import (
+	"ecommerce-evermos-projects/internal/helper"
+	"ecommerce-evermos-projects/internal/infrastructure/mysql"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
-	"tugas_akhir_example/internal/helper"
-	"tugas_akhir_example/internal/infrastructure/mysql"
 
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -33,7 +33,7 @@ type (
 )
 
 func loadEnv() {
-	projectDirName := "tugas_akhir_example"
+	projectDirName := "ecommerce-evermos-projects"
 	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
 	currentWorkDirectory, _ := os.Getwd()
 	rootPath := projectName.Find([]byte(currentWorkDirectory))

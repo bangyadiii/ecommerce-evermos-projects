@@ -1,9 +1,9 @@
 package mysql
 
 import (
+	"ecommerce-evermos-projects/internal/daos"
+	"ecommerce-evermos-projects/internal/helper"
 	"fmt"
-	"tugas_akhir_example/internal/daos"
-	"tugas_akhir_example/internal/helper"
 
 	"gorm.io/gorm"
 )

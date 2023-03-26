@@ -1,10 +1,10 @@
 package mysql
 
 import (
+	"ecommerce-evermos-projects/internal/helper"
 	"encoding/json"
 	"fmt"
 	"time"
-	"tugas_akhir_example/internal/helper"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -45,7 +45,6 @@ func DatabaseInit(v *viper.Viper) *gorm.DB {
 		helper.Logger(currentfilepath, helper.LoggerLevelPanic, fmt.Sprintf("Cannot conenct to database : %s", err.Error()))
 	}
 
-	// TODO POOLING CONNECTION
 	sqlDB.SetConnMaxLifetime(time.Duration(mysqlConfig.MaxLifetime * int(time.Minute)))
 	sqlDB.SetMaxOpenConns(mysqlConfig.MaxOpenConnections)
 	sqlDB.SetMaxIdleConns(mysqlConfig.MinIdleConnections)
