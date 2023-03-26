@@ -1,1 +1,1 @@
-## Boilerplate for Rakamin Final Task
+## Boilerplate golang Clean RESTfull API
