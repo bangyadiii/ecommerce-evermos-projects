@@ -2,6 +2,7 @@ package controller
 
 import (
 	"log"
+	"tugas_akhir_example/internal/helper"
 	booksdto "tugas_akhir_example/internal/pkg/dto"
 	booksusecase "tugas_akhir_example/internal/pkg/usecase"
 
@@ -32,9 +33,7 @@ func (uc *BooksControllerImpl) GetAllBooks(ctx *fiber.Ctx) error {
 	filter := new(booksdto.BooksFilter)
 	if err := ctx.QueryParser(filter); err != nil {
 		log.Println(err)
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return helper.ErrorResponse(ctx, fiber.StatusBadRequest, "Bad Request", err.Error())
 	}
 
 	res, err := uc.booksusecase.GetAllBooks(c, booksdto.BooksFilter{
@@ -49,9 +48,7 @@ func (uc *BooksControllerImpl) GetAllBooks(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": res,
-	})
+	return helper.SuccessResponse(ctx, fiber.StatusOK, "get all data success", res)
 }
 
 func (uc *BooksControllerImpl) GetBooksByID(ctx *fiber.Ctx) error {
