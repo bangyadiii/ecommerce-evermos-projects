@@ -9,18 +9,18 @@ type Response struct {
 	Errors  interface{} `json:"errors"`
 }
 
-func SuccessResponse(ctx *fiber.Ctx, code int, message string, data interface{}) error {
+func SuccessResponse(ctx *fiber.Ctx, code int, data interface{}) error {
 	return ctx.Status(code).JSON(Response{
 		Status:  true,
-		Message: message,
+		Message: "Succeed to " + ctx.Method() + " data",
 		Data:    data,
 	})
 }
 
-func ErrorResponse(ctx *fiber.Ctx, code int, message string, errors interface{}) error {
+func ErrorResponse(ctx *fiber.Ctx, code int, errors interface{}) error {
 	return ctx.Status(code).JSON(Response{
 		Status:  false,
-		Message: message,
+		Message: "Failed to " + ctx.Method() + " data",
 		Errors:  errors,
 	})
 }

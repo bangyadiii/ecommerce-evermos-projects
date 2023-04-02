@@ -33,7 +33,9 @@ func (uc *BooksControllerImpl) GetAllBooks(ctx *fiber.Ctx) error {
 	filter := new(booksdto.BooksFilter)
 	if err := ctx.QueryParser(filter); err != nil {
 		log.Println(err)
-		return helper.ErrorResponse(ctx, fiber.StatusBadRequest, "Bad Request", err.Error())
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
 	res, err := uc.booksusecase.GetAllBooks(c, booksdto.BooksFilter{
@@ -48,7 +50,7 @@ func (uc *BooksControllerImpl) GetAllBooks(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return helper.SuccessResponse(ctx, fiber.StatusOK, "get all data success", res)
+	return helper.SuccessResponse(ctx, fiber.StatusOK,  res)
 }
 
 func (uc *BooksControllerImpl) GetBooksByID(ctx *fiber.Ctx) error {
