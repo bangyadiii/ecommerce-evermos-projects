@@ -17,9 +17,9 @@ import (
 type CategoryUseCase interface {
 	GetAllCategory(ctx context.Context) (res []dto.CategoryRes, err *helper.ErrorStruct)
 	GetCategoryByID(ctx context.Context, ID uint) (res dto.CategoryRes, err *helper.ErrorStruct)
-	CreateCategory(ctx context.Context, data dto.CategoryReqCreate) (res uint, err *helper.ErrorStruct)
-	UpdateCategoryByID(ctx context.Context, id uint, data dto.CategoryReqUpdate) (res string, err *helper.ErrorStruct)
-	DeleteCategoryByID(ctx context.Context, id uint) (res string, err *helper.ErrorStruct)
+	CreateCategory(ctx context.Context, user daos.User, data dto.CategoryReqCreate) (res uint, err *helper.ErrorStruct)
+	UpdateCategoryByID(ctx context.Context, user daos.User, categoryID uint, data dto.CategoryReqUpdate) (res string, err *helper.ErrorStruct)
+	DeleteCategoryByID(ctx context.Context, user daos.User, categoryID uint) (res string, err *helper.ErrorStruct)
 }
 
 type categoryUseCaseImpl struct {
@@ -72,12 +72,19 @@ func (s *categoryUseCaseImpl) GetCategoryByID(ctx context.Context, ID uint) (res
 	return res, nil
 }
 
-func (alc *categoryUseCaseImpl) CreateCategory(ctx context.Context, data dto.CategoryReqCreate) (res uint, err *helper.ErrorStruct) {
+func (alc *categoryUseCaseImpl) CreateCategory(ctx context.Context, user daos.User, data dto.CategoryReqCreate) (res uint, err *helper.ErrorStruct) {
 	if errValidate := helper.Validate.Struct(data); errValidate != nil {
 		log.Println(errValidate)
 		return res, &helper.ErrorStruct{
 			Err:  errValidate,
 			Code: fiber.StatusBadRequest,
+		}
+	}
+
+	if !user.IsAdmin {
+		return res, &helper.ErrorStruct{
+			Code: fiber.StatusForbidden,
+			Err:  errors.New("need to be an admin"),
 		}
 	}
 
@@ -96,7 +103,7 @@ func (alc *categoryUseCaseImpl) CreateCategory(ctx context.Context, data dto.Cat
 	return resRepo, nil
 }
 
-func (alc *categoryUseCaseImpl) UpdateCategoryByID(ctx context.Context, id uint, data dto.CategoryReqUpdate) (res string, err *helper.ErrorStruct) {
+func (alc *categoryUseCaseImpl) UpdateCategoryByID(ctx context.Context, user daos.User, categoryID uint, data dto.CategoryReqUpdate) (res string, err *helper.ErrorStruct) {
 	if errValidate := helper.Validate.Struct(data); errValidate != nil {
 		log.Println(errValidate)
 		return res, &helper.ErrorStruct{
@@ -104,8 +111,13 @@ func (alc *categoryUseCaseImpl) UpdateCategoryByID(ctx context.Context, id uint,
 			Code: fiber.StatusBadRequest,
 		}
 	}
-
-	resRepo, errRepo := alc.categoryRepo.UpdateCategoryByID(ctx, id, daos.Category{
+	if !user.IsAdmin {
+		return res, &helper.ErrorStruct{
+			Code: fiber.StatusForbidden,
+			Err:  errors.New("need to be an admin"),
+		}
+	}
+	resRepo, errRepo := alc.categoryRepo.UpdateCategoryByID(ctx, categoryID, daos.Category{
 		Nama: data.Nama,
 	})
 
@@ -120,15 +132,21 @@ func (alc *categoryUseCaseImpl) UpdateCategoryByID(ctx context.Context, id uint,
 	return resRepo, nil
 }
 
-func (alc *categoryUseCaseImpl) DeleteCategoryByID(ctx context.Context, id uint) (res string, err *helper.ErrorStruct) {
-	_, errRepo := alc.categoryRepo.FindCategoryByID(ctx, id)
+func (alc *categoryUseCaseImpl) DeleteCategoryByID(ctx context.Context, user daos.User, categoryID uint) (res string, err *helper.ErrorStruct) {
+	_, errRepo := alc.categoryRepo.FindCategoryByID(ctx, categoryID)
 	if errors.Is(errRepo, gorm.ErrRecordNotFound) {
 		return res, &helper.ErrorStruct{
 			Code: fiber.StatusNotFound,
 			Err:  errRepo,
 		}
 	}
-	res, errRepo = alc.categoryRepo.DeleteCategoryByID(ctx, id)
+	if !user.IsAdmin {
+		return res, &helper.ErrorStruct{
+			Code: fiber.StatusForbidden,
+			Err:  errors.New("need to be an admin"),
+		}
+	}
+	res, errRepo = alc.categoryRepo.DeleteCategoryByID(ctx, categoryID)
 
 	if errRepo != nil {
 		helper.Logger(currentfilepath, helper.LoggerLevelError, fmt.Sprintf("Error at GetAllBooks : %s", errRepo.Error()))

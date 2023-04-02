@@ -4,7 +4,6 @@ import (
 	"ecommerce-evermos-projects/internal/helper"
 	"ecommerce-evermos-projects/internal/pkg/usecase"
 	"ecommerce-evermos-projects/internal/utils/jwt"
-	"encoding/json"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -43,9 +42,8 @@ func VerifyToken(uc usecase.UsersUseCase, secret string) fiber.Handler {
 		if user.Email != u.Email {
 			return helper.ErrorResponse(c, fiber.StatusUnauthorized, err.Error())
 		}
-		json, _ := json.Marshal(user)
 
-		c.Set("current_user", string(json))
+		c.Locals("current_user", user)
 		return c.Next()
 	}
 

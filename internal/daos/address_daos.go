@@ -9,4 +9,5 @@ type Alamat struct {
 	NamaPenerima string `json:"nama_penerima"`
 	NoTelp       string `json:"no_telp"`
 	DetailAlamat string `json:"detail_alamat"`
+	User User
 }

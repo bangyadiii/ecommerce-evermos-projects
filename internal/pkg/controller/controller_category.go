@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"ecommerce-evermos-projects/internal/daos"
 	"ecommerce-evermos-projects/internal/helper"
 	"ecommerce-evermos-projects/internal/pkg/dto"
 	"ecommerce-evermos-projects/internal/pkg/usecase"
@@ -40,7 +41,7 @@ func (ctl *CategoryControllerImpl) GetCategoryByID(ctx *fiber.Ctx) error {
 	res, errUC := ctl.uc.GetCategoryByID(c, uint(id))
 
 	if errUC != nil {
-		return helper.ErrorResponse(ctx, errUC.Code, err.Error())
+		return helper.ErrorResponse(ctx, errUC.Code, errUC.Err.Error())
 	}
 
 	return helper.SuccessResponse(ctx, fiber.StatusOK, res)
@@ -53,7 +54,14 @@ func (ctl *CategoryControllerImpl) CreateCategory(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(data); err != nil {
 		return helper.ErrorResponse(ctx, fiber.StatusBadRequest, err.Error())
 	}
-	res, errUC := ctl.uc.CreateCategory(c, *data)
+	// Retrieve the current_user value set by middleware
+	currentUserVal, ok := ctx.Locals("current_user").(daos.User)
+	if !ok {
+		// handle error
+		return helper.ErrorResponse(ctx, fiber.StatusInternalServerError, "Failed to retrieve current user")
+	}
+
+	res, errUC := ctl.uc.CreateCategory(c, currentUserVal, *data)
 	if errUC != nil {
 		return helper.ErrorResponse(ctx, errUC.Code, errUC.Err.Error())
 	}
@@ -71,8 +79,13 @@ func (ctl *CategoryControllerImpl) UpdateCategoryByID(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(data); err != nil {
 		return helper.ErrorResponse(ctx, fiber.StatusBadRequest, err.Error())
 	}
+	// Retrieve the current_user value set by middleware
+	currentUserVal, ok := ctx.Locals("current_user").(daos.User)
+	if !ok {
+		return helper.ErrorResponse(ctx, fiber.StatusInternalServerError, "Failed to retrieve current user")
+	}
 
-	res, errUC := ctl.uc.UpdateCategoryByID(c, uint(categoryId), *data)
+	res, errUC := ctl.uc.UpdateCategoryByID(c, currentUserVal, uint(categoryId), *data)
 	if errUC != nil {
 		return helper.ErrorResponse(ctx, errUC.Code, errUC.Err.Error())
 	}
@@ -86,8 +99,12 @@ func (ctl *CategoryControllerImpl) DeleteCategoryByID(ctx *fiber.Ctx) error {
 	if er != nil || categoryId == 0 {
 		return helper.ErrorResponse(ctx, fiber.StatusNotFound, "record not found")
 	}
+	currentUserVal, ok := ctx.Locals("current_user").(daos.User)
+	if !ok {
+		return helper.ErrorResponse(ctx, fiber.StatusInternalServerError, "Failed to retrieve current user")
+	}
 
-	res, err := ctl.uc.DeleteCategoryByID(c, uint(categoryId))
+	res, err := ctl.uc.DeleteCategoryByID(c, currentUserVal, uint(categoryId))
 
 	if err != nil {
 		return helper.ErrorResponse(ctx, err.Code, err.Err.Error())
