@@ -1,8 +1,8 @@
 package dto
 
 type UserReqLogin struct {
-	Email    string `json:"email" validate:"required"`
-	Password string `json:"password" validate:"required"`
+	NoTelp   string `json:"no_telp" validate:"required"`
+	Password string `json:"kata_sandi" validate:"required"`
 }
 
 type UserResLogin struct {

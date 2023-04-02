@@ -13,13 +13,14 @@ type (
 		TanggalLahir *string `json:"tanggal_Lahir" gorm:"tanggal_lahir"`
 		Tentang      *string `json:"tentang" gorm:"tentang"`
 		Pekerjaan    *string `json:"pekerjaan" gorm:"pekerjaan"`
-		Password     string  `json:"-" gorm:"password"`
+		Password     string  `json:"kata_sandi" gorm:"kata_sandi"`
 		ProvinsiID   string  `json:"id_provinsi" gorm:"id_provinsi"`
 		KotaID       string  `json:"id_kota" gorm:"id_kota"`
 		IsAdmin      bool    `json:"is_admin"`
 	}
 
 	FilterUser struct {
-		Email string `json:"email"`
+		Email  string `json:"email"`
+		NoTelp string `json:"no_telp"`
 	}
 )

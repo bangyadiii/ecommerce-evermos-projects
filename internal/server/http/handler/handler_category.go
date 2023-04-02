@@ -14,7 +14,7 @@ func CategoryRoute(r fiber.Router, containerConf *container.Container) {
 	repo := repository.NewCategoryRepository(containerConf.Mysqldb)
 	userRepo := repository.NewUserRepository(containerConf.Mysqldb)
 	uc := usecase.NewCategoryUseCase(repo)
-	ucUser := usecase.NewUsersUseCase(userRepo)
+	ucUser := usecase.NewUsersUseCase(userRepo, *containerConf.Apps)
 
 	controller := controller.NewCategoryController(uc)
 	secret := containerConf.Apps.SecretJwt

@@ -4,6 +4,7 @@ import (
 	"ecommerce-evermos-projects/internal/helper"
 	"ecommerce-evermos-projects/internal/infrastructure/mysql"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -69,6 +70,8 @@ func init() {
 
 func AppsInit(v *viper.Viper) (apps Apps) {
 	err := v.Unmarshal(&apps)
+
+	log.Println("apps", apps)
 	if err != nil {
 		helper.Logger(currentfilepath, helper.LoggerLevelPanic, fmt.Sprint("Error when unmarshal configuration file : ", err.Error()))
 	}

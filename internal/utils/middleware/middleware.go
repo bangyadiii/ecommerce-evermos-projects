@@ -23,13 +23,16 @@ func VerifyToken(uc usecase.UsersUseCase, secret string) fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 		token := c.Get("token")
+		if token == "" {
+			return helper.ErrorResponse(c, fiber.StatusUnauthorized, "Unauthorized")
+		}
 
 		accessToken, err := jwt.ValidateToken(token, []byte(secret))
 		if err != nil {
 			return helper.ErrorResponse(c, fiber.StatusUnauthorized, err.Error())
 		}
 
-		u := accessToken.Claims.(jwt.CustomClaims)
+		u := accessToken.Claims.(*jwt.CustomClaims)
 
 		user, er := uc.GetUser(c.Context(), u.Email)
 

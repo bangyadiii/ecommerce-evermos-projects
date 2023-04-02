@@ -61,7 +61,7 @@ func (r *categoryRepoImpl) UpdateCategoryByID(ctx context.Context, id uint, data
 		return "Update category failed", gorm.ErrRecordNotFound
 	}
 
-	if err := r.db.Updates(&data).Where("id = ? ", id).Error; err != nil {
+	if err := r.db.Where("id = ? ", id).Updates(&data).Error; err != nil {
 		return "Update category failed", err
 	}
 
@@ -71,7 +71,7 @@ func (r *categoryRepoImpl) UpdateCategoryByID(ctx context.Context, id uint, data
 func (r *categoryRepoImpl) DeleteCategoryByID(ctx context.Context, id uint) (res string, err error) {
 	var data daos.Category
 
-	if err := r.db.Debug().WithContext(ctx).Delete(&data).Where("id = ?", id).Error; err != nil {
+	if err := r.db.Debug().WithContext(ctx).Where("id = ?", id).Delete(&data).Error; err != nil {
 		return "Delete category failed", err
 	}
 

@@ -38,10 +38,10 @@ func (uc *AuthControllerImpl) Register(ctx *fiber.Ctx) error {
 		return helper.ErrorResponse(ctx, fiber.StatusBadRequest, err.Error())
 	}
 
-	res, err := uc.useruc.Register(ctx.Context(), *reqBody)
+	res, errRepo := uc.useruc.Register(ctx.Context(), *reqBody)
 
-	if err != nil {
-		return helper.ErrorResponse(ctx, err.Code, err.Err.Error())
+	if errRepo != nil {
+		return helper.ErrorResponse(ctx, errRepo.Code, errRepo.Err.Error())
 	}
 
 	return helper.SuccessResponse(ctx, fiber.StatusOK,  res)

@@ -11,6 +11,7 @@ import (
 	"ecommerce-evermos-projects/internal/utils/password"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -27,20 +28,21 @@ type UsersUseCaseImpl struct {
 	apps            container.Apps
 }
 
-func NewUsersUseCase(usersrepository repository.UsersRepository) UsersUseCase {
+func NewUsersUseCase(usersrepository repository.UsersRepository, apps container.Apps) UsersUseCase {
 	return &UsersUseCaseImpl{
 		usersRepository: usersrepository,
+		apps:            apps,
 	}
 
 }
 
 func (alc *UsersUseCaseImpl) Login(ctx context.Context, params dto.UserReqLogin) (res dto.UserResLogin, err *helper.ErrorStruct) {
-	resRepo, errRepo := alc.usersRepository.FindByEmail(ctx, params.Email)
+	resRepo, errRepo := alc.usersRepository.FindByNoTelp(ctx, params.NoTelp)
 
 	if errors.Is(errRepo, gorm.ErrRecordNotFound) {
 		return res, &helper.ErrorStruct{
 			Code: fiber.StatusNotFound,
-			Err:  errors.New("no data books"),
+			Err:  errors.New("user not found"),
 		}
 	}
 
@@ -59,7 +61,8 @@ func (alc *UsersUseCaseImpl) Login(ctx context.Context, params dto.UserReqLogin)
 			Err:  errPass,
 		}
 	}
-
+	log.Println("secret :", alc.apps.SecretJwt)
+	log.Println("port :", alc.apps.HttpPort)
 	token, errJWT := jwt.CreateJWT(int(resRepo.ID), resRepo.Email, []byte(alc.apps.SecretJwt))
 	if errJWT != nil {
 		return res, &helper.ErrorStruct{
@@ -83,15 +86,15 @@ func (alc *UsersUseCaseImpl) Login(ctx context.Context, params dto.UserReqLogin)
 
 func (r *UsersUseCaseImpl) Register(ctx context.Context, params dto.UserReqRegister) (res string, err *helper.ErrorStruct) {
 	_, errRepo := r.usersRepository.FindByEmail(ctx, params.Email)
-	if errors.Is(errRepo, gorm.ErrRecordNotFound) {
+	if !errors.Is(errRepo, gorm.ErrRecordNotFound) {
 		return res, &helper.ErrorStruct{
-			Code: fiber.StatusNotFound,
-			Err:  errors.New("no data books"),
+			Code: fiber.StatusBadRequest,
+			Err:  errors.New("email not available"),
 		}
 	}
 
 	hashed, errPass := password.HashPassword([]byte(params.Password))
-	if errRepo == nil {
+	if errPass != nil {
 		return "", &helper.ErrorStruct{
 			Code: fiber.StatusBadRequest,
 			Err:  errPass,

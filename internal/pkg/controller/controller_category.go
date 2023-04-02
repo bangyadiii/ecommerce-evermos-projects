@@ -77,7 +77,7 @@ func (ctl *CategoryControllerImpl) UpdateCategoryByID(ctx *fiber.Ctx) error {
 		return helper.ErrorResponse(ctx, errUC.Code, errUC.Err.Error())
 	}
 
-	return helper.SuccessResponse(ctx, fiber.StatusCreated, res)
+	return helper.SuccessResponse(ctx, fiber.StatusOK, res)
 }
 
 func (ctl *CategoryControllerImpl) DeleteCategoryByID(ctx *fiber.Ctx) error {

@@ -1,6 +1,10 @@
 package helper
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"strings"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 type Response struct {
 	Status  bool        `json:"status"`
@@ -17,10 +21,15 @@ func SuccessResponse(ctx *fiber.Ctx, code int, data interface{}) error {
 	})
 }
 
-func ErrorResponse(ctx *fiber.Ctx, code int, errors interface{}) error {
+func ErrorResponse(ctx *fiber.Ctx, code int, errors string) error {
+	var splittedError []string
+
+	if len(errors) > 0 {
+		splittedError = strings.Split(errors, "\n")
+	}
 	return ctx.Status(code).JSON(Response{
 		Status:  false,
 		Message: "Failed to " + ctx.Method() + " data",
-		Errors:  errors,
+		Errors:  splittedError,
 	})
 }

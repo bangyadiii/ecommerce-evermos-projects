@@ -121,7 +121,14 @@ func (alc *categoryUseCaseImpl) UpdateCategoryByID(ctx context.Context, id uint,
 }
 
 func (alc *categoryUseCaseImpl) DeleteCategoryByID(ctx context.Context, id uint) (res string, err *helper.ErrorStruct) {
-	resRepo, errRepo := alc.categoryRepo.DeleteCategoryByID(ctx, id)
+	_, errRepo := alc.categoryRepo.FindCategoryByID(ctx, id)
+	if errors.Is(errRepo, gorm.ErrRecordNotFound) {
+		return res, &helper.ErrorStruct{
+			Code: fiber.StatusNotFound,
+			Err:  errRepo,
+		}
+	}
+	res, errRepo = alc.categoryRepo.DeleteCategoryByID(ctx, id)
 
 	if errRepo != nil {
 		helper.Logger(currentfilepath, helper.LoggerLevelError, fmt.Sprintf("Error at GetAllBooks : %s", errRepo.Error()))
@@ -131,5 +138,5 @@ func (alc *categoryUseCaseImpl) DeleteCategoryByID(ctx context.Context, id uint)
 		}
 	}
 
-	return resRepo, nil
+	return res, nil
 }

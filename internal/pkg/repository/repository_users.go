@@ -10,6 +10,7 @@ import (
 type UsersRepository interface {
 	SaveUser(ctx context.Context, user daos.User, toko daos.Toko) (daos.User, error)
 	FindByEmail(ctx context.Context, email string) (daos.User, error)
+	FindByNoTelp(ctx context.Context, noTelp string) (daos.User, error)
 	FindByUserID(ctx context.Context, id uint) (daos.User, error)
 }
 
@@ -45,6 +46,15 @@ func (r *usersRepository) SaveUser(ctx context.Context, user daos.User, toko dao
 		return user, err
 	}
 
+	return user, nil
+}
+func (r *usersRepository) FindByNoTelp(ctx context.Context, noTelp string) (daos.User, error) {
+	var user daos.User
+	err := r.db.Debug().WithContext(ctx).Where("no_telp = ?", noTelp).First(&user).Error
+
+	if err != nil {
+		return user, err
+	}
 	return user, nil
 }
 
