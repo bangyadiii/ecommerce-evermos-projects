@@ -1,1 +1,1 @@
-DROP IF EXISTS tokos
+DROP TABLE IF EXISTS tokos

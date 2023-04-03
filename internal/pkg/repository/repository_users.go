@@ -82,7 +82,7 @@ func (r *usersRepository) FindByUserID(ctx context.Context, id uint) (daos.User,
 }
 
 func (r *usersRepository) UpdateUser(ctx context.Context, user daos.User) (daos.User, error) {
-	err := r.db.Debug().WithContext(ctx).Where("id = ?", user.ID).Save(&user).Error
+	err := r.db.Debug().WithContext(ctx).Model(&user).Where("id = ?", user.ID).Updates(&user).Error
 
 	if err != nil {
 		return user, err

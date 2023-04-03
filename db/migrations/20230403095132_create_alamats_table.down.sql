@@ -1,1 +1,1 @@
-DROP IF EXISTS TABLE alamats
+DROP TABLE IF EXISTS alamats

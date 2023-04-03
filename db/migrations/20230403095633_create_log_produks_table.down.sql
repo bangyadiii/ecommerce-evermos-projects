@@ -1,1 +1,1 @@
-DROP IF EXISTS TABLE log_produks
+DROP TABLE IF EXISTS log_produks

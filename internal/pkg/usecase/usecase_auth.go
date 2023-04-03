@@ -122,7 +122,7 @@ func (r *UsersUseCaseImpl) Register(ctx context.Context, params dto.UserReqRegis
 		Name: user.Nama,
 	})
 
-	if err != nil {
+	if errRepo != nil {
 		return "", &helper.ErrorStruct{
 			Code: fiber.StatusBadRequest,
 			Err:  errRepo,

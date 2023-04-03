@@ -1,1 +1,0 @@
-DROP IF EXISTS TABLE log_produks

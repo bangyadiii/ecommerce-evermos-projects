@@ -14,7 +14,7 @@ type (
 		Tentang      *string `json:"tentang" gorm:"type:text"`
 		Pekerjaan    *string `json:"pekerjaan" gorm:"type:text"`
 		KataSandi    string  `json:"kata_sandi" gorm:"type:text"`
-		ProvinsiID   string  `json:"provinsi_id" gorm:"type:text"`
+		ProvinsiID   string  `json:"id_provinsi" gorm:"type:text"`
 		KotaID       string  `json:"id_kota" gorm:"type:text"`
 		IsAdmin      bool    `json:"is_admin" gorm:"index"`
 	}

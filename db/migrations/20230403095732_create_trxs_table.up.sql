@@ -1,4 +1,4 @@
-CREATE TABLE trxs (
+CREATE TABLE trxes (
     id BIGINT unsigned AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
