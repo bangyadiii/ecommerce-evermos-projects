@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"ecommerce-evermos-projects/internal/daos"
 	"ecommerce-evermos-projects/internal/helper"
 	"ecommerce-evermos-projects/internal/pkg/dto"
 	"ecommerce-evermos-projects/internal/pkg/usecase"
@@ -28,7 +29,7 @@ func (uc *AuthControllerImpl) Login(ctx *fiber.Ctx) error {
 		return helper.ErrorResponse(ctx, err.Code, err.Err.Error())
 	}
 
-	return helper.SuccessResponse(ctx, fiber.StatusOK,  res)
+	return helper.SuccessResponse(ctx, fiber.StatusOK, res)
 }
 
 func (uc *AuthControllerImpl) Register(ctx *fiber.Ctx) error {
@@ -44,5 +45,41 @@ func (uc *AuthControllerImpl) Register(ctx *fiber.Ctx) error {
 		return helper.ErrorResponse(ctx, errRepo.Code, errRepo.Err.Error())
 	}
 
-	return helper.SuccessResponse(ctx, fiber.StatusOK,  res)
+	return helper.SuccessResponse(ctx, fiber.StatusOK, res)
+}
+
+func (ctl *AuthControllerImpl) GetCurrentUser(ctx *fiber.Ctx) error {
+	c := ctx.Context()
+	// Retrieve the current_user value set by middleware
+	currentUserVal, ok := ctx.Locals("current_user").(daos.User)
+	if !ok {
+		return helper.ErrorResponse(ctx, fiber.StatusInternalServerError, "Failed to retrieve current user")
+	}
+	res, err := ctl.useruc.GetUser(c, currentUserVal.Email)
+	if err != nil {
+		return helper.ErrorResponse(ctx, err.Code, err.Err.Error())
+	}
+
+	return helper.SuccessResponse(ctx, fiber.StatusOK, res)
+}
+
+func (ctl *AuthControllerImpl) UpdateUser(ctx *fiber.Ctx) error {
+	c := ctx.Context()
+	reqBody := new(dto.UserReqUpdate)
+
+	if err := ctx.BodyParser(reqBody); err != nil {
+		return helper.ErrorResponse(ctx, fiber.StatusBadRequest, err.Error())
+	}
+	// Retrieve the current_user value set by middleware
+	currentUserVal, ok := ctx.Locals("current_user").(daos.User)
+	if !ok {
+		return helper.ErrorResponse(ctx, fiber.StatusInternalServerError, "Failed to retrieve current user")
+	}
+	res, err := ctl.useruc.UpdateUser(c, currentUserVal, *reqBody)
+
+	if err != nil {
+		return helper.ErrorResponse(ctx, err.Code, err.Err.Error())
+	}
+
+	return helper.SuccessResponse(ctx, fiber.StatusOK, res)
 }

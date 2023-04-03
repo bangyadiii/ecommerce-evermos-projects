@@ -11,3 +11,4 @@ type Alamat struct {
 	DetailAlamat string `json:"detail_alamat"`
 	User User
 }
+

@@ -74,7 +74,6 @@ func (s *categoryUseCaseImpl) GetCategoryByID(ctx context.Context, ID uint) (res
 
 func (alc *categoryUseCaseImpl) CreateCategory(ctx context.Context, user daos.User, data dto.CategoryReqCreate) (res uint, err *helper.ErrorStruct) {
 	if errValidate := helper.Validate.Struct(data); errValidate != nil {
-		log.Println(errValidate)
 		return res, &helper.ErrorStruct{
 			Err:  errValidate,
 			Code: fiber.StatusBadRequest,

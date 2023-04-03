@@ -21,6 +21,7 @@ type UsersUseCase interface {
 	Login(ctx context.Context, params dto.UserReqLogin) (res dto.UserResLogin, err *helper.ErrorStruct)
 	Register(ctx context.Context, params dto.UserReqRegister) (string, *helper.ErrorStruct)
 	GetUser(ctx context.Context, email string) (res daos.User, err *helper.ErrorStruct)
+	UpdateUser(ctx context.Context, currentUser daos.User, data dto.UserReqUpdate) (res string, err *helper.ErrorStruct)
 }
 
 type UsersUseCaseImpl struct {
@@ -85,6 +86,13 @@ func (alc *UsersUseCaseImpl) Login(ctx context.Context, params dto.UserReqLogin)
 }
 
 func (r *UsersUseCaseImpl) Register(ctx context.Context, params dto.UserReqRegister) (res string, err *helper.ErrorStruct) {
+	if errValidate := helper.Validate.Struct(params); errValidate != nil {
+		return res, &helper.ErrorStruct{
+			Err:  errValidate,
+			Code: fiber.StatusBadRequest,
+		}
+	}
+
 	_, errRepo := r.usersRepository.FindByEmail(ctx, params.Email)
 	if !errors.Is(errRepo, gorm.ErrRecordNotFound) {
 		return res, &helper.ErrorStruct{
@@ -122,6 +130,26 @@ func (r *UsersUseCaseImpl) Register(ctx context.Context, params dto.UserReqRegis
 	}
 
 	return "Register Succeed", nil
+}
+
+func (alc *UsersUseCaseImpl) UpdateUser(ctx context.Context, currentUser daos.User, data dto.UserReqUpdate) (res string, err *helper.ErrorStruct) {
+	currentUser.Nama = data.Nama
+	currentUser.Email = data.Email
+	currentUser.NoTelp = data.NoTelp
+	currentUser.TanggalLahir = data.TanggalLahir
+	currentUser.Pekerjaan = data.Pekerjaan
+	currentUser.ProvinsiID = data.ProvinsiID
+	currentUser.KotaID = data.KotaID
+
+	_, errRepo := alc.usersRepository.UpdateUser(ctx, currentUser)
+	if errRepo != nil {
+		return res, &helper.ErrorStruct{
+			Code: fiber.StatusNotFound,
+			Err:  errRepo,
+		}
+	}
+
+	return "Update user success", nil
 }
 
 func (alc *UsersUseCaseImpl) GetUser(ctx context.Context, email string) (res daos.User, err *helper.ErrorStruct) {
