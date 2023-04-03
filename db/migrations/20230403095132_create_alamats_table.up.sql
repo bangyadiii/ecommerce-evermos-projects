@@ -4,9 +4,9 @@ CREATE TABLE alamats (
     updated_at TIMESTAMP,
     deleted_at TIMESTAMP,
     id_user BIGINT unsigned,
-    judul TEXT,
-    nama_penerima TEXT,
-    no_telp VARCHAR(20) UNIQUE,
-    detail_alamat TEXT,
+    judul VARCHAR(255),
+    nama_penerima VARCHAR(255),
+    no_telp VARCHAR(20),
+    detail_alamat VARCHAR(255),
     FOREIGN KEY (id_user) REFERENCES users(id)
 );

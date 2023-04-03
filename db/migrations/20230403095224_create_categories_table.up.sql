@@ -3,5 +3,5 @@ CREATE TABLE categories (
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     deleted_at TIMESTAMP,
-    nama_category TEXT
+    nama_category VARCHAR(255)
 );

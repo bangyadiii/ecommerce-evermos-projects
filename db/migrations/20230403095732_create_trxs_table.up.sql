@@ -6,8 +6,8 @@ CREATE TABLE trxs (
     id_user BIGINT unsigned,
     alamat_pengiriman BIGINT unsigned,
     harga_total INT,
-    kode_invoice TEXT,
-    metode_bayar TEXT,
+    kode_invoice VARCHAR(255),
+    metode_bayar VARCHAR(100),
     FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (alamat_pengiriman) REFERENCES alamats(id)
 );

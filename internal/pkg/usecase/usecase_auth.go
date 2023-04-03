@@ -55,7 +55,7 @@ func (alc *UsersUseCaseImpl) Login(ctx context.Context, params dto.UserReqLogin)
 		}
 	}
 
-	errPass := password.ComparePassword([]byte(resRepo.Password), []byte(params.Password))
+	errPass := password.ComparePassword([]byte(resRepo.KataSandi), []byte(params.KataSandi))
 	if errPass != nil {
 		return res, &helper.ErrorStruct{
 			Code: fiber.StatusBadRequest,
@@ -101,7 +101,7 @@ func (r *UsersUseCaseImpl) Register(ctx context.Context, params dto.UserReqRegis
 		}
 	}
 
-	hashed, errPass := password.HashPassword([]byte(params.Password))
+	hashed, errPass := password.HashPassword([]byte(params.KataSandi))
 	if errPass != nil {
 		return "", &helper.ErrorStruct{
 			Code: fiber.StatusBadRequest,
@@ -115,7 +115,7 @@ func (r *UsersUseCaseImpl) Register(ctx context.Context, params dto.UserReqRegis
 		NoTelp:       params.NoTelp,
 		TanggalLahir: params.TanggalLahir,
 		Tentang:      params.Tentang,
-		Password:     string(hashed),
+		KataSandi:    string(hashed),
 	}
 
 	_, errRepo = r.usersRepository.SaveUser(ctx, user, daos.Toko{
@@ -138,6 +138,7 @@ func (alc *UsersUseCaseImpl) UpdateUser(ctx context.Context, currentUser daos.Us
 	currentUser.NoTelp = data.NoTelp
 	currentUser.TanggalLahir = data.TanggalLahir
 	currentUser.Pekerjaan = data.Pekerjaan
+	currentUser.Tentang = data.Tentang
 	currentUser.ProvinsiID = data.ProvinsiID
 	currentUser.KotaID = data.KotaID
 

@@ -1,8 +1,8 @@
 package dto
 
 type UserReqLogin struct {
-	NoTelp   string `json:"no_telp" validate:"required"`
-	Password string `json:"kata_sandi" validate:"required"`
+	NoTelp    string `json:"no_telp" validate:"required"`
+	KataSandi string `json:"kata_sandi" validate:"required"`
 }
 
 type UserResLogin struct {
@@ -22,7 +22,7 @@ type UserReqRegister struct {
 	TanggalLahir *string `json:"tanggal_Lahir" validate:"required"`
 	Tentang      *string `json:"tentang" validate:""`
 	Pekerjaan    *string `json:"pekerjaan" validate:""`
-	Password     string  `json:"kata_sandi" validate:"required"`
+	KataSandi    string  `json:"kata_sandi" validate:"required"`
 	ProvinsiID   string  `json:"id_provinsi" `
 	KotaID       string  `json:"id_kota"`
 }
@@ -34,7 +34,7 @@ type UserReqUpdate struct {
 	TanggalLahir *string `json:"tanggal_Lahir" validate:""`
 	Tentang      *string `json:"tentang" validate:""`
 	Pekerjaan    *string `json:"pekerjaan" validate:""`
-	Password     string  `json:"kata_sandi" validate:""`
+	KataSandi    string  `json:"kata_sandi" validate:""`
 	ProvinsiID   string  `json:"id_provinsi" `
 	KotaID       string  `json:"id_kota"`
 }

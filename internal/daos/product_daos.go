@@ -5,37 +5,37 @@ import "gorm.io/gorm"
 type Produk struct {
 	gorm.Model
 	Nama          string       `json:"nama_produk"`
-	Slug          string       `json:"slug" gorm:"slug"`
-	HargaReseller string       `json:"harga_reseller"`
-	HargaKonsumen string       `json:"harga_konsumen"`
-	Stok          string       `json:"stok" `
+	Slug          string       `json:"slug" gorm:"slug;type:text" `
+	HargaReseller int          `json:"harga_reseller" gorm:"type:Int"`
+	HargaKonsumen int          `json:"harga_konsumen" gorm:"type:Int"`
+	Stok          int          `json:"stok" gorm:"type:int"`
 	Deskripsi     string       `json:"deskripsi"`
-	TokoID        uint         `json:"id_toko" gorm:"id_toko"`
-	Toko          Toko         `gorm:"constraint:OnDelete:CASCADE"`
-	FotoProduks   []FotoProduk `json:"foto_produks"`
-	CategoryID    uint
-	Category      Category `gorm:"constraint:OnDelete:CASCADE"`
+	TokoID        uint         `json:"id_toko" gorm:"foreignKey:id_toko"`
+	Toko          Toko         ``
+	FotoProduks   []FotoProduk `json:"produks"`
+	CategoryID    uint         `json:"category_id" gorm:"foreignKey:category_id"`
+	Category      Category     ``
 }
 
 type FotoProduk struct {
 	gorm.Model
-	ProdukID uint
-	Produk   Produk `gorm:"constraint:OnDelete:CASCADE"`
+	ProdukID uint   `json:"id_produk" gorm:"foreignKey:id_produk"`
+	Produk   Produk ``
 }
 
 type LogProduk struct {
 	gorm.Model
-	ProdukID      uint `json:"id_produk" gorm:"id_produk"`
-	Produk        Produk
-	Nama          string       `json:"nama_produk"`
-	Slug          string       `json:"slug" gorm:"slug"`
-	HargaReseller string       `json:"harga_reseller"`
-	HargaKonsumen string       `json:"harga_konsumen"`
-	Stok          string       `json:"stok" `
+	ProdukID      uint         `json:"id_produk" gorm:"foreignKey:id_produk"`
+	Produk        Produk       ``
+	Nama          string       `json:"nama_produk" gorm:"type:varchar(255)"`
+	Slug          string       `json:"slug" gorm:"slug;type:varchar(255)"`
+	HargaReseller int          `json:"harga_reseller" gorm:"int"`
+	HargaKonsumen int          `json:"harga_konsumen" gorm:"int"`
+	Stok          int          `json:"stok" gorm:"type:int"`
 	Deskripsi     string       `json:"deskripsi"`
-	TokoID        uint         `json:"id_toko" gorm:"id_toko"`
-	Toko          Toko         `gorm:"constraint:OnDelete:CASCADE"`
-	FotoProduks   []FotoProduk `json:"foto_produks"`
-	CategoryID    uint
-	Category      Category `gorm:"constraint:OnDelete:CASCADE"`
+	TokoID        uint         `json:"id_toko" gorm:"foreignKey:id_toko"`
+	Toko          Toko         ``
+	FotoProduks   []FotoProduk `json:"foto_produks" gorm:"-"`
+	CategoryID    uint         `json:"id_category" gorm:"foreignKey:id_category"`
+	Category      Category     ``
 }

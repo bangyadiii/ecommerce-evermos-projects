@@ -52,7 +52,7 @@ func DatabaseInit(v *viper.Viper) *gorm.DB {
 	helper.Logger(currentfilepath, helper.LoggerLevelInfo, "⇨ MySQL status is connected")
 	val, _ := json.Marshal(sqlDB.Stats())
 	helper.Logger(currentfilepath, helper.LoggerLevelDebug, string(val))
-	// RunMigration(db)
+	RunMigration(db)
 
 	return db
 }

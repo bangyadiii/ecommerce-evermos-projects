@@ -7,16 +7,16 @@ import (
 type (
 	User struct {
 		gorm.Model
-		Nama         string  `json:"nama" gorm:"nama"`
-		Email        string  `json:"email" gorm:"email,index:unique_email,unique"`
-		NoTelp       string  `json:"no_telp" gorm:"no_telp,index:unique_no_telp,unique"`
-		TanggalLahir *string `json:"tanggal_Lahir" gorm:"tanggal_lahir"`
-		Tentang      *string `json:"tentang" gorm:"tentang"`
-		Pekerjaan    *string `json:"pekerjaan" gorm:"pekerjaan"`
-		Password     string  `json:"kata_sandi" gorm:"kata_sandi"`
-		ProvinsiID   string  `json:"id_provinsi" gorm:"id_provinsi"`
-		KotaID       string  `json:"id_kota" gorm:"id_kota"`
-		IsAdmin      bool    `json:"is_admin"`
+		Nama         string  `json:"nama" gorm:"type:text"`
+		Email        string  `json:"email" gorm:"type:varchar(255);unique"`
+		NoTelp       string  `json:"no_telp" gorm:"type:varchar(20);unique"`
+		TanggalLahir *string `json:"tanggal_Lahir" gorm:"type:text"`
+		Tentang      *string `json:"tentang" gorm:"type:text"`
+		Pekerjaan    *string `json:"pekerjaan" gorm:"type:text"`
+		KataSandi    string  `json:"kata_sandi" gorm:"type:text"`
+		ProvinsiID   string  `json:"provinsi_id" gorm:"type:text"`
+		KotaID       string  `json:"id_kota" gorm:"type:text"`
+		IsAdmin      bool    `json:"is_admin" gorm:"index"`
 	}
 
 	FilterUser struct {
