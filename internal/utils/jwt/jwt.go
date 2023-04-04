@@ -18,7 +18,7 @@ func CreateJWT(ID int, email string, secret []byte) (string, error) {
 	claims.ID = strconv.Itoa(ID)
 	claims.Email = email
 	claims.Issuer = "evermos-ecommerce"
-	claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(time.Minute * 2))
+	claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(time.Minute * 10))
 	claims.IssuedAt = jwt.NewNumericDate(time.Now())
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

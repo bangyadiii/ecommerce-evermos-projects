@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Trx struct {
 	gorm.Model
-	UserID      uint   `json:"id_user" gorm:"foreignKey:id_user"`
+	UserID      uint   `json:"id_user" gorm:"column:id_user;foreignKey:id_user"`
 	AlamatID    uint   `json:"alamat_id" gorm:"column:alamat_pengiriman;foreignKey:Alamat;references:ID"`
 	Alamat      Alamat ``
 	HargaTotal  int    `json:"harga_total" gorm:"type:int"`
@@ -14,10 +14,10 @@ type Trx struct {
 
 type DetailTrx struct {
 	gorm.Model
-	TrxID       uint      `json:"id_trx" gorm:"foreignKey:id_trx"`
+	TrxID       uint      `json:"id_trx" gorm:"column:id_trx;foreignKey:id_trx"`
 	Trx         Trx       ``
-	LogProdukID uint      `json:"id_log_produk" gorm:"foreignkey:id_log_produk"`
+	LogProdukID uint      `json:"id_log_produk" gorm:"column:id_log_produk;foreignkey:id_log_produk"`
 	LogProduk   LogProduk ``
 	Kuantitas   int       `json:"kuantitas" gorm:"type:int"`
-	HargaTotal  int      `json:"harga_total" gorm:"type:int"`
+	HargaTotal  int       `json:"harga_total" gorm:"type:int"`
 }

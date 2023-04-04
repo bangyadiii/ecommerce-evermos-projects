@@ -15,4 +15,5 @@ func HTTPRouteInit(r *fiber.App, containerConf *container.Container) {
 	route.BooksRoute(api, containerConf)
 	route.CategoryRoute(api, containerConf)
 	route.UserRoute(api, containerConf)
+	route.TokoRoute(api, containerConf)
 }

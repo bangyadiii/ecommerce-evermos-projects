@@ -10,10 +10,10 @@ type Produk struct {
 	HargaKonsumen int          `json:"harga_konsumen" gorm:"type:Int"`
 	Stok          int          `json:"stok" gorm:"type:int"`
 	Deskripsi     string       `json:"deskripsi"`
-	TokoID        uint         `json:"id_toko" gorm:"foreignKey:id_toko"`
+	TokoID        uint         `json:"id_toko" gorm:"column:id_toko;foreignKey:id_toko"`
 	Toko          Toko         ``
 	FotoProduks   []FotoProduk `json:"produks"`
-	CategoryID    uint         `json:"category_id" gorm:"foreignKey:category_id"`
+	CategoryID    uint         `json:"category_id" gorm:"column:category_id;foreignKey:category_id"`
 	Category      Category     ``
 }
 
@@ -25,7 +25,7 @@ type FotoProduk struct {
 
 type LogProduk struct {
 	gorm.Model
-	ProdukID      uint         `json:"id_produk" gorm:"foreignKey:id_produk"`
+	ProdukID      uint         `json:"id_produk" gorm:"column:id_produk;foreignKey:id_produk"`
 	Produk        Produk       ``
 	Nama          string       `json:"nama_produk" gorm:"type:varchar(255)"`
 	Slug          string       `json:"slug" gorm:"slug;type:varchar(255)"`
@@ -33,9 +33,9 @@ type LogProduk struct {
 	HargaKonsumen int          `json:"harga_konsumen" gorm:"int"`
 	Stok          int          `json:"stok" gorm:"type:int"`
 	Deskripsi     string       `json:"deskripsi"`
-	TokoID        uint         `json:"id_toko" gorm:"foreignKey:id_toko"`
+	TokoID        uint         `json:"id_toko" gorm:"column:id_toko;foreignKey:id_toko"`
 	Toko          Toko         ``
 	FotoProduks   []FotoProduk `json:"foto_produks" gorm:"-"`
-	CategoryID    uint         `json:"id_category" gorm:"foreignKey:id_category"`
+	CategoryID    uint         `json:"id_category" gorm:"column:id_category;foreignKey:id_category"`
 	Category      Category     ``
 }
