@@ -17,9 +17,18 @@ type Produk struct {
 	Category      Category     ``
 }
 
+type FilterProduk struct {
+	Nama          string `json:"nama_produk"`
+	Deskripsi     string `json:"deskripsi"`
+	HargaKonsumen int    `json:"harga_konsumen"`
+	Limit         int
+	Offset        int
+}
+
 type FotoProduk struct {
 	gorm.Model
 	ProdukID uint   `json:"id_produk" gorm:"foreignKey:id_produk"`
+	Url      string `json:"url" gorm:"column:url;type:varchar(255)"`
 	Produk   Produk ``
 }
 

@@ -25,5 +25,7 @@ func main() {
 	rest.HTTPRouteInit(app, containerConf)
 
 	port := fmt.Sprintf("%s:%d", containerConf.Apps.Host, containerConf.Apps.HttpPort)
+
+	app.Static("/", "./images")
 	helper.Logger("main.go", helper.LoggerLevelFatal, app.Listen(port).Error())
 }

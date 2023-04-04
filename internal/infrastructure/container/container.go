@@ -3,6 +3,7 @@ package container
 import (
 	"ecommerce-evermos-projects/internal/helper"
 	"ecommerce-evermos-projects/internal/infrastructure/mysql"
+	"ecommerce-evermos-projects/internal/infrastructure/storage"
 	"fmt"
 	"log"
 	"os"
@@ -21,15 +22,20 @@ type (
 	Container struct {
 		Mysqldb *gorm.DB
 		Apps    *Apps
+		Storage storage.Storage
 	}
 
 	Apps struct {
-		Name      string `mapstructure:"name"`
-		Host      string `mapstructure:"host"`
-		Version   string `mapstructure:"version"`
-		Address   string `mapstructure:"address"`
-		HttpPort  int    `mapstructure:"httpport"`
-		SecretJwt string `mapstructure:"secretJwt"`
+		Name                string `mapstructure:"name"`
+		Host                string `mapstructure:"host"`
+		Version             string `mapstructure:"version"`
+		Address             string `mapstructure:"address"`
+		HttpPort            int    `mapstructure:"httpport"`
+		SecretJwt           string `mapstructure:"secretJwt"`
+		FileSystem          string `mapstructure:"fileSystem"`
+		GCSBucketName       string `mapstructure:"gcs_bucketName"`
+		GCSPublicUrl        string `mapstructure:"gcs_publicUrl"`
+		BasePathFileStorage string `mapstructure:"basePathFileStorage"`
 	}
 )
 
@@ -79,13 +85,21 @@ func AppsInit(v *viper.Viper) (apps Apps) {
 	return
 }
 
-func InitContainer() (cont *Container) {
+func InitContainer() *Container {
 	apps := AppsInit(v)
 	mysqldb := mysql.DatabaseInit(v)
+	var strg storage.Storage
+
+	if apps.FileSystem == "gcss" {
+		strg = storage.NewCloudStorage(apps.GCSBucketName, apps.BasePathFileStorage, apps.GCSPublicUrl)
+	} else {
+		strg = storage.NewLocalStorage(apps.BasePathFileStorage)
+	}
 
 	return &Container{
 		Apps:    &apps,
 		Mysqldb: mysqldb,
+		Storage: strg,
 	}
 
 }

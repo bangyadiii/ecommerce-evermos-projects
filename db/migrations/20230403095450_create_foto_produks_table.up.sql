@@ -4,5 +4,6 @@ CREATE TABLE foto_produks (
     updated_at TIMESTAMP,
     deleted_at TIMESTAMP,
     id_produk BIGINT unsigned,
+    url VARCHAR(255),
     FOREIGN KEY (id_produk) REFERENCES produks(id) ON DELETE CASCADE
 );

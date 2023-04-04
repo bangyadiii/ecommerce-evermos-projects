@@ -4,14 +4,11 @@ import (
 	"context"
 	"ecommerce-evermos-projects/internal/daos"
 	"ecommerce-evermos-projects/internal/helper"
+	"ecommerce-evermos-projects/internal/infrastructure/storage"
 	"ecommerce-evermos-projects/internal/pkg/dto"
 	"ecommerce-evermos-projects/internal/pkg/repository"
 	"ecommerce-evermos-projects/internal/pkg/validator"
-	"ecommerce-evermos-projects/internal/utils/uploader"
 	"errors"
-	"fmt"
-	"strconv"
-	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -25,7 +22,8 @@ type TokoUseCase interface {
 }
 
 type TokoUseCaseImpl struct {
-	repo repository.TokoRepository
+	repo    repository.TokoRepository
+	storage storage.Storage
 }
 
 func NewTokoUseCase(repo repository.TokoRepository) TokoUseCase {
@@ -154,18 +152,10 @@ func (uc *TokoUseCaseImpl) UpdateToko(ctx context.Context, id uint, user daos.Us
 		}
 	}
 
-	filename := strings.Replace(strconv.Itoa(int(id)), "-", "", -1)
-
-	// extract image extension from original file filename
-	fileExt := strings.Split(data.Photo.Filename, ".")[1]
-
-	// generate image from filename and extension
-	image := fmt.Sprintf("%s.%s", filename, fileExt)
-
 	// save image to ./images dir
-	er = uploader.SaveFile(data.Photo, fmt.Sprintf("./images/%s", image))
+	fotoUrl, er := uc.storage.UploadFile(data.Photo, "toko")
 
-	if errRepo != nil {
+	if er != nil {
 		return res, &helper.ErrorStruct{
 			Err:  er,
 			Code: fiber.StatusInternalServerError,
@@ -173,7 +163,8 @@ func (uc *TokoUseCaseImpl) UpdateToko(ctx context.Context, id uint, user daos.Us
 	}
 
 	res, errRepo = uc.repo.UpdateToko(ctx, id, daos.Toko{
-		Name: data.Nama,
+		Name:     data.Nama,
+		PhotoUrl: &fotoUrl,
 	})
 
 	if errRepo != nil {
